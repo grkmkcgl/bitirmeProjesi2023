@@ -38,7 +38,7 @@
    <bool>true</bool>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QFrame" name="OrthoMap">
+   <widget class="QFrame" name="ImageViewer">
     <property name="geometry">
      <rect>
       <x>30</x>
@@ -63,10 +63,10 @@
    <widget class="QLabel" name="label_3">
     <property name="geometry">
      <rect>
-      <x>260</x>
+      <x>250</x>
       <y>10</y>
-      <width>49</width>
-      <height>16</height>
+      <width>91</width>
+      <height>20</height>
      </rect>
     </property>
     <property name="font">
@@ -76,7 +76,7 @@
      </font>
     </property>
     <property name="text">
-     <string>MAP</string>
+     <string>Detection</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
@@ -514,6 +514,45 @@
     </property>
     <property name="text">
      <string>Show Messages</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="nextimagepushButton">
+    <property name="geometry">
+     <rect>
+      <x>400</x>
+      <y>630</y>
+      <width>80</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Next</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="previousimagepushButton">
+    <property name="geometry">
+     <rect>
+      <x>310</x>
+      <y>630</y>
+      <width>80</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Previous</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="autoChangePushButton">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>630</y>
+      <width>80</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Current</string>
     </property>
    </widget>
   </widget>

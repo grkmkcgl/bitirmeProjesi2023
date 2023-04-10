@@ -2,6 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QPixmap>
+#include <QLabel>
 #include "RtspCamera.h"
 
 QT_BEGIN_NAMESPACE
@@ -17,10 +19,20 @@ public:
     ~MainWindow();
     RtspCamera RtspCamera;
 
+    // image viewer
+//    QPixmap image("C:/Users/gorke/Desktop/treePhotos/Red_Apple.jpg");
+    QPixmap image;
+    QLabel *imageLabel = new QLabel();
+    QVBoxLayout *imageViewerLayout = new QVBoxLayout();
+
 private slots:
     void on_progressBar_valueChanged(int value);
     void on_startVideoConnectionButton_clicked();
     void on_ConnectVideoButton_clicked();
+
+    void on_nextimagepushButton_clicked();
+    void on_previousimagepushButton_clicked();
+    void on_autoChangePushButton_clicked();
 
 private:
     Ui::MainWindow *ui;
