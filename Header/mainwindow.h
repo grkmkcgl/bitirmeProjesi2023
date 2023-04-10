@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QPixmap>
 #include <QLabel>
+#include <QDirIterator>
 #include "RtspCamera.h"
 
 QT_BEGIN_NAMESPACE
@@ -20,10 +21,16 @@ public:
     RtspCamera RtspCamera;
 
     // image viewer
-//    QPixmap image("C:/Users/gorke/Desktop/treePhotos/Red_Apple.jpg");
     QPixmap image;
     QLabel *imageLabel = new QLabel();
     QVBoxLayout *imageViewerLayout = new QVBoxLayout();
+
+    // file system
+//    QDirIterator it("C:/Users/gorke/Desktop/treePhotos",
+//                    QStringList() << "*.jpg",
+//                    QDir::Files,
+//                    QDirIterator::Subdirectories);
+    QDirIterator *it;
 
 private slots:
     void on_progressBar_valueChanged(int value);

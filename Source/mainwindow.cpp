@@ -12,14 +12,21 @@ MainWindow::MainWindow(QWidget *parent)
     ui->VideoFrame->setLayout(RtspCamera.rtspLayout);
 
     // image viewer
-    QPixmap image("C:/Users/gorke/Desktop/treePhotos/Red_Apple.jpg");
+//    QPixmap image("C:/Users/gorke/Desktop/treePhotos/Red_Apple.jpg");
     imageLabel = new QLabel();
     imageLabel->setScaledContents(true);
-    imageLabel->setPixmap(image);
+//    imageLabel->setPixmap(image);
 
     imageViewerLayout = new QVBoxLayout();
     imageViewerLayout->addWidget(imageLabel);
     ui->ImageViewer->setLayout(imageViewerLayout);
+
+    it = new QDirIterator("C:/Users/gorke/Desktop/treePhotos",
+                       QStringList() << "*.jpg",
+                       QDir::Files,
+                       QDirIterator::Subdirectories);
+
+
 }
 
 MainWindow::~MainWindow()
@@ -43,10 +50,27 @@ void MainWindow::on_ConnectVideoButton_clicked()
     RtspCamera.connectVideo();
 }
 
+#include <QDirIterator>
+#include <QThread>
 void MainWindow::on_nextimagepushButton_clicked()
 {
-    image.load("C:/Users/gorke/Desktop/treePhotos/agac.jpg");
-    imageLabel->setPixmap(image);
+    if(it->hasNext())
+    {
+//        QThread::msleep(1000);
+//        qDebug() << it->next();
+        image.load(it->next());
+        imageLabel->setPixmap(image);
+    }
+    else
+    {
+        // does delete needed here?????
+        imageLabel->clear();
+        it = new QDirIterator("C:/Users/gorke/Desktop/treePhotos",
+                              QStringList() << "*.jpg",
+                              QDir::NoFilter,
+                              QDirIterator::Subdirectories);
+        qDebug() << "no more files in directory";
+    }
 }
 
 void MainWindow::on_previousimagepushButton_clicked()
