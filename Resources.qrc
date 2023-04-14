@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/images">
+        <file>Resource/droneicon.png</file>
+        <file>Resource/EOF.jpg</file>
+    </qresource>
+</RCC>

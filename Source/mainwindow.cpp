@@ -12,16 +12,14 @@ MainWindow::MainWindow(QWidget *parent)
     ui->VideoFrame->setLayout(RtspCamera.rtspLayout);
 
     // image viewer
-//    QPixmap image("C:/Users/gorke/Desktop/treePhotos/Red_Apple.jpg");
     imageLabel = new QLabel();
     imageLabel->setScaledContents(true);
-//    imageLabel->setPixmap(image);
-
     imageViewerLayout = new QVBoxLayout();
     imageViewerLayout->addWidget(imageLabel);
     ui->ImageViewer->setLayout(imageViewerLayout);
 
-    it = new QDirIterator("C:/Users/gorke/Desktop/treePhotos",
+    // image iterator
+    it = new QDirIterator("../../treePhotos",
                        QStringList() << "*.jpg",
                        QDir::Files,
                        QDirIterator::Subdirectories);
@@ -50,36 +48,104 @@ void MainWindow::on_ConnectVideoButton_clicked()
     RtspCamera.connectVideo();
 }
 
-#include <QDirIterator>
-#include <QThread>
 void MainWindow::on_nextimagepushButton_clicked()
 {
-    if(it->hasNext())
+    if (!jpgList.isEmpty())
     {
-//        QThread::msleep(1000);
-//        qDebug() << it->next();
-        image.load(it->next());
+        jpgListIndex += 1;
+    }
+    if ((jpgListIndex < jpgList.length()) && (!jpgList.isEmpty()))
+    {
+        image.load(jpgList[jpgListIndex]);
         imageLabel->setPixmap(image);
     }
     else
     {
-        // delete needed here to prevent memory leaks
-        imageLabel->clear();
-        it = new QDirIterator("C:/Users/gorke/Desktop/treePhotos",
-                              QStringList() << "*.jpg",
-                              QDir::NoFilter,
-                              QDirIterator::Subdirectories);
-        qDebug() << "no more files in directory";
+        image.load(":/images/Resource/EOF.jpg");
+        imageLabel->setPixmap(image);
     }
 }
 
 void MainWindow::on_previousimagepushButton_clicked()
 {
-
+    if (jpgListIndex > jpgList.length())
+    {
+        jpgListIndex = jpgList.length();
+    }
+    if (jpgListIndex > 0)
+    {
+        jpgListIndex -= 1;
+        image.load(jpgList[jpgListIndex]);
+        imageLabel->setPixmap(image);
+    }
+    else
+    {
+        jpgListIndex = -1;
+        image.load(":/images/Resource/EOF.jpg");
+        imageLabel->setPixmap(image);
+    }
 }
 
 void MainWindow::on_autoChangePushButton_clicked()
 {
+    QDirIterator dir("../../treePhotos",
+                   QStringList() << "*.jpg",
+                   QDir::Files,
+                   QDirIterator::Subdirectories);
 
+    int newFiles = 0;
+    while (dir.hasNext())
+    {
+        newFiles += 1;
+        dir.next();
+    }
+
+    if (newFiles != jpgList.length())
+    {
+        delete it;
+        it = new QDirIterator("../../treePhotos",
+                           QStringList() << "*.jpg",
+                           QDir::Files,
+                           QDirIterator::Subdirectories);
+        filesChanged = true;
+        newFiles = 0;
+        jpgList.clear();
+    }
+
+    while(it->hasNext() && filesChanged)
+    {
+        ui->jgpListInfoLabel->setText("Copying paths...");
+        jpgList.append(it->next());
+    }
+    filesChanged = false;
+
+    jpgListIndex = jpgList.length() - 1;
+    ui->jgpListInfoLabel->setText(QString("Done! Found %1 images.").arg(jpgList.length()));
+    image.load(jpgList[jpgListIndex]);
+    imageLabel->setPixmap(image);
 }
+
+
+
+
+// backup
+//void MainWindow::on_nextimagepushButton_clicked()
+//{
+//    if(it->hasNext())
+//    {
+//        image.load(it->next());
+//        imageLabel->setPixmap(image);
+//    }
+//    else
+//    {
+//        delete it;
+//        image.load(":/images/Resource/EOF.jpg");
+//        imageLabel->setPixmap(image);
+//        it = new QDirIterator("../../YOLO/yolov7/runs/hub",
+//                              QStringList() << "*.jpg",
+//                              QDir::NoFilter,
+//                              QDirIterator::Subdirectories);
+//        qDebug() << "no more files in directory";
+//    }
+//}
 
