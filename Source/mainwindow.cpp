@@ -63,7 +63,7 @@ void MainWindow::on_nextimagepushButton_clicked()
     }
     else
     {
-        // does delete needed here?????
+        // delete needed here to prevent memory leaks
         imageLabel->clear();
         it = new QDirIterator("C:/Users/gorke/Desktop/treePhotos",
                               QStringList() << "*.jpg",
