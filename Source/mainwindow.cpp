@@ -23,8 +23,6 @@ MainWindow::MainWindow(QWidget *parent)
                        QStringList() << "*.jpg",
                        QDir::Files,
                        QDirIterator::Subdirectories);
-
-
 }
 
 MainWindow::~MainWindow()
@@ -114,13 +112,15 @@ void MainWindow::on_autoChangePushButton_clicked()
 
     while(it->hasNext() && filesChanged)
     {
-        ui->jgpListInfoLabel->setText("Copying paths...");
+        ui->statusbar->showMessage("Copying paths...");
+        ui->statusbar->setStyleSheet("background-color: rgb(122, 0, 0);");
         jpgList.append(it->next());
     }
     filesChanged = false;
 
     jpgListIndex = jpgList.length() - 1;
-    ui->jgpListInfoLabel->setText(QString("Done! Found %1 images.").arg(jpgList.length()));
+    ui->statusbar->showMessage(QString("Done! Found %1 images.").arg(jpgList.length()));
+    ui->statusbar->setStyleSheet("background-color: rgb(0, 255, 0);");
     image.load(jpgList[jpgListIndex]);
     imageLabel->setPixmap(image);
 }

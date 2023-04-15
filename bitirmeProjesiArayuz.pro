@@ -25,6 +25,7 @@ SOURCES += \
 
 
 HEADERS += \
+    Header/TODO.h \
     camera.h \
     CommHandler.h \
     mainwindow.h \
