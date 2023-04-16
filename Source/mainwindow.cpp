@@ -30,7 +30,6 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-
 void MainWindow::on_progressBar_valueChanged(int value)
 {
 

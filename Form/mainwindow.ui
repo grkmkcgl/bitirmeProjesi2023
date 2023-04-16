@@ -559,19 +559,6 @@
      <string>Current</string>
     </property>
    </widget>
-   <widget class="QLabel" name="jgpListInfoLabel">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>660</y>
-      <width>171</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
