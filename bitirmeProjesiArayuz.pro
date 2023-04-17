@@ -17,19 +17,21 @@ VPATH   += \
     ./Form   \
 
 SOURCES += \
+    heximageConverter.cpp \
     main.cpp \
     camera.cpp \
-    CommHandler.cpp \
     mainwindow.cpp \
     RtspCamera.cpp \
+    myserver.cpp \
 
 
 HEADERS += \
-    Header/TODO.h \
+    TODO.h \
     camera.h \
-    CommHandler.h \
     mainwindow.h \
     RtspCamera.h \
+    myserver.h \
+    heximageConverter.h \
 
 FORMS += \
     mainwindow.ui
