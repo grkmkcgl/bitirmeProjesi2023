@@ -33,11 +33,6 @@ void MainWindow::converter()
     QDataStream out(&ba, QIODevice::ReadWrite);
     out << arr;
 
-//    // display image on ui
-//    QPixmap img;
-//    img.loadFromData(arr);
-//    imageLabel->setPixmap(img);
-
 //    // create and write image as hex file
     QFile fileSaver("some_name.txt");
     fileSaver.open(QIODevice::WriteOnly);
@@ -57,11 +52,21 @@ void MainWindow::converter()
     stream >> test;
     file.close();
 
+//    // display image on ui
     QPixmap img;
     img.loadFromData(test);
     imageLabel->setPixmap(img);
 
+
+//     // datastream input can be used with deleting headers:
+//    QByteArray sil = file.readAll();
+//    sil.remove(0,4);
+//    QPixmap img;
+//    img.loadFromData(sil);
+//    imageLabel->setPixmap(img);
+
     bool iseq = (test == arr);
-    qDebug() << iseq;
+    if (iseq) qDebug() << "input and readed output file is equal, image should be loadable.";
+    else qDebug() << "something wrong";
 }
 

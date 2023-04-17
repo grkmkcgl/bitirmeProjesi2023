@@ -8,7 +8,6 @@ myServer::myServer(QObject *parent)
     server = new QTcpServer(this);
 
     connect(server, SIGNAL(newConnection()), this, SLOT(onNewConnection()));
-    qDebug() << "server address: " <<server->serverAddress();
 
     // listen for new connection
     if(!server->listen(QHostAddress::Any, 1234))
@@ -21,8 +20,7 @@ myServer::myServer(QObject *parent)
        qDebug() << "Server started successfully!";
     }
 
-    qDebug() << server->socketDescriptor();
-//    qDebug() << QNetworkInterface::allAddresses();l
+//    qDebug() << QNetworkInterface::allAddresses();
 }
 
 
@@ -38,12 +36,10 @@ void myServer::onNewConnection()
         socket->write(QByteArray::fromStdString(socket->peerAddress().toString().toStdString() + " connected to server !\n"));
     }
 
-    qDebug() << "a user is connected";
+    qDebug() << "A user is connected";
     socket->write("hello \r\n");
     socket->flush(); // to buffer (or from buffer)
     socket->waitForBytesWritten(5000);
-
-
 
 /*
     QByteArray block;
@@ -69,6 +65,7 @@ void myServer::onSocketStateChanged(QAbstractSocket::SocketState socketState)
     {
         QTcpSocket* sender = static_cast<QTcpSocket*>(QObject::sender());
         sockets.removeOne(sender);
+        qDebug() << "A user disconnected from server";
     }
 }
 
