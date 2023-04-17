@@ -14,7 +14,6 @@ public:
 
 signals:
 
-
 public slots:
     void onNewConnection();
     void onReadyRead();

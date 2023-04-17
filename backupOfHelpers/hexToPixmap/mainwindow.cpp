@@ -22,38 +22,46 @@ MainWindow::~MainWindow()
 void MainWindow::converter()
 {
 //    // load image, save into arr, save image into arr as buffer
-    QImage img_enrll("C:/Users/gorke/Desktop/QT/bitirmeProjesiArayuz/Resource/droneicon.png");
+    QImage img_enrll("C:/Users/gorke/Desktop/treePhotos/Red_Apple.jpg");
+//    QImage img_enrll("C:/Users/gorke/Desktop/QT/bitirmeProjesiArayuz/Resource/droneicon.png");
     QByteArray arr;
     QBuffer buffer(&arr);
     buffer.open(QIODevice::WriteOnly);
-    img_enrll.save(&buffer, "PNG");
+    img_enrll.save(&buffer, "JPG");   // when using yolo photos make it JPG
+
+    QByteArray ba;
+    QDataStream out(&ba, QIODevice::ReadWrite);
+    out << arr;
 
 //    // display image on ui
-    QPixmap img;
-    img.loadFromData(arr);
-    imageLabel->setPixmap(img);
+//    QPixmap img;
+//    img.loadFromData(arr);
+//    imageLabel->setPixmap(img);
 
 //    // create and write image as hex file
-    QFile file("some_name.txt");
-    file.open(QIODevice::WriteOnly);
-    file.write(arr.toHex());
-    file.close();
+    QFile fileSaver("some_name.txt");
+    fileSaver.open(QIODevice::WriteOnly);
+    fileSaver.write(ba);
+    fileSaver.close();
 
 //    // load from txt file and show.
-    QString filePath = "C:/Users/gorke/Desktop/QT/build-hexToPixmap-Desktop_Qt_5_15_2_MinGW_32_bit-Debug/some_name.txt";
-    QFile file(filePath);
+    QFile file("some_name.txt");
     QByteArray test;
 
-    if (file.open(QIODevice::ReadOnly | QIODevice::Text))
+    if (!file.open(QIODevice::ReadOnly))
     {
-        QTextStream stream(&file);
-        QString hex = stream.readAll();
-        test = QByteArray::fromHex(hex.toLatin1());
+        qDebug() << "couldn't open file!";
+        return;
     }
+    QDataStream stream(&file);
+    stream >> test;
     file.close();
 
     QPixmap img;
     img.loadFromData(test);
     imageLabel->setPixmap(img);
+
+    bool iseq = (test == arr);
+    qDebug() << iseq;
 }
 

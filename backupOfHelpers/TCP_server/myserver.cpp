@@ -22,26 +22,27 @@ myServer::myServer(QObject *parent)
     }
 
     qDebug() << server->socketDescriptor();
-//    qDebug() << QNetworkInterface::allAddresses();
+//    qDebug() << QNetworkInterface::allAddresses();l
 }
 
 
 void myServer::onNewConnection()
 {
     QTcpSocket *socket = server->nextPendingConnection();
-
     connect(socket, SIGNAL(readyRead()), this, SLOT(onReadyRead()));
     connect(socket, SIGNAL(stateChanged(QAbstractSocket::SocketState)), this, SLOT(onSocketStateChanged(QAbstractSocket::SocketState)));
-
-    socket->write("hello \r\n");
-    socket->flush(); // to buffer (or from buffer)
-    socket->waitForBytesWritten(5000);
 
     sockets.push_back(socket);
     for (QTcpSocket* socket : sockets)
     {
         socket->write(QByteArray::fromStdString(socket->peerAddress().toString().toStdString() + " connected to server !\n"));
     }
+
+    qDebug() << "a user is connected";
+    socket->write("hello \r\n");
+    socket->flush(); // to buffer (or from buffer)
+    socket->waitForBytesWritten(5000);
+
 
 
 /*
