@@ -20,17 +20,16 @@ public:
     ~MainWindow();
     RtspCamera RtspCamera;
 
-    // image viewer
+    // image viewer widget
     QPixmap image;
     QLabel *imageLabel = new QLabel();
     QVBoxLayout *imageViewerLayout = new QVBoxLayout();
 
-    // file system
-//    QDirIterator it("C:/Users/gorke/Desktop/treePhotos",
-//                    QStringList() << "*.jpg",
-//                    QDir::Files,
-//                    QDirIterator::Subdirectories);
+    // file iterator to show images
     QDirIterator *it;
+    QStringList jpgList;
+    int jpgListIndex = -1;
+    bool filesChanged = false;
 
 private slots:
     void on_progressBar_valueChanged(int value);
