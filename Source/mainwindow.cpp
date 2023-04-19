@@ -19,10 +19,12 @@ MainWindow::MainWindow(QWidget *parent)
     ui->ImageViewer->setLayout(imageViewerLayout);
 
     // image iterator
-    it = new QDirIterator("../../treePhotos",
+    it = new QDirIterator("../../../treePhotos",
                        QStringList() << "*.jpg",
                        QDir::Files,
                        QDirIterator::Subdirectories);
+
+    tcpServer = new myServer;
 }
 
 MainWindow::~MainWindow()
@@ -85,66 +87,80 @@ void MainWindow::on_previousimagepushButton_clicked()
 
 void MainWindow::on_autoChangePushButton_clicked()
 {
-    QDirIterator dir("../../treePhotos",
-                   QStringList() << "*.jpg",
-                   QDir::Files,
-                   QDirIterator::Subdirectories);
+//    QFile file("C:/Users/gorke/Desktop/QT/build-hexToPixmap-Desktop_Qt_5_15_2_MinGW_32_bit-Debug/some_name.txt");
+//    QByteArray test;
 
-    int newFiles = 0;
-    while (dir.hasNext())
-    {
-        newFiles += 1;
-        dir.next();
-    }
-
-    if (newFiles != jpgList.length())
-    {
-        delete it;
-        it = new QDirIterator("../../treePhotos",
-                           QStringList() << "*.jpg",
-                           QDir::Files,
-                           QDirIterator::Subdirectories);
-        filesChanged = true;
-        newFiles = 0;
-        jpgList.clear();
-    }
-
-    while(it->hasNext() && filesChanged)
-    {
-        ui->statusbar->showMessage("Copying paths...");
-        ui->statusbar->setStyleSheet("background-color: rgb(122, 0, 0);");
-        jpgList.append(it->next());
-    }
-    filesChanged = false;
-
-    jpgListIndex = jpgList.length() - 1;
-    ui->statusbar->showMessage(QString("Done! Found %1 images.").arg(jpgList.length()));
-    ui->statusbar->setStyleSheet("background-color: rgb(0, 255, 0);");
-    image.load(jpgList[jpgListIndex]);
-    imageLabel->setPixmap(image);
-}
-
-
-
-
-// backup
-//void MainWindow::on_nextimagepushButton_clicked()
-//{
-//    if(it->hasNext())
+//    if (!file.open(QIODevice::ReadOnly))
 //    {
-//        image.load(it->next());
-//        imageLabel->setPixmap(image);
+//        qDebug() << "couldn't open file!";
+//        return;
 //    }
-//    else
+//    QDataStream stream(&file);
+//    stream >> test;
+//    file.close();
+
+    QByteArray valueToUi = tcpServer->tcpData;
+    QPixmap tcpDataImage;
+    tcpDataImage.loadFromData(valueToUi);
+    imageLabel->setPixmap(tcpDataImage);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//    QDirIterator dir("../../treePhotos",
+//                   QStringList() << "*.jpg",
+//                   QDir::Files,
+//                   QDirIterator::Subdirectories);
+
+//    int newFiles = 0;
+//    while (dir.hasNext())
+//    {
+//        newFiles += 1;
+//        dir.next();
+//    }
+
+//    if (newFiles != jpgList.length())
 //    {
 //        delete it;
-//        image.load(":/images/Resource/EOF.jpg");
-//        imageLabel->setPixmap(image);
-//        it = new QDirIterator("../../YOLO/yolov7/runs/hub",
-//                              QStringList() << "*.jpg",
-//                              QDir::NoFilter,
-//                              QDirIterator::Subdirectories);
-//        qDebug() << "no more files in directory";
+//        it = new QDirIterator("../../treePhotos",
+//                           QStringList() << "*.jpg",
+//                           QDir::Files,
+//                           QDirIterator::Subdirectories);
+//        filesChanged = true;
+//        newFiles = 0;
+//        jpgList.clear();
 //    }
-//}
+
+//    while(it->hasNext() && filesChanged)
+//    {
+//        ui->statusbar->showMessage("Copying paths...");
+//        ui->statusbar->setStyleSheet("background-color: rgb(122, 0, 0);");
+//        jpgList.append(it->next());
+//    }
+//    filesChanged = false;
+
+//    jpgListIndex = jpgList.length() - 1;
+//    ui->statusbar->showMessage(QString("Done! Found %1 images.").arg(jpgList.length()));
+//    ui->statusbar->setStyleSheet("background-color: rgb(0, 255, 0);");
+//    image.load(jpgList[jpgListIndex]);
+//    imageLabel->setPixmap(image);
+}
 

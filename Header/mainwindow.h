@@ -6,6 +6,7 @@
 #include <QLabel>
 #include <QDirIterator>
 #include "RtspCamera.h"
+#include "myserver.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -31,11 +32,13 @@ public:
     int jpgListIndex = -1;
     bool filesChanged = false;
 
+    // init server
+    myServer *tcpServer;
+
 private slots:
     void on_progressBar_valueChanged(int value);
     void on_startVideoConnectionButton_clicked();
     void on_ConnectVideoButton_clicked();
-
     void on_nextimagepushButton_clicked();
     void on_previousimagepushButton_clicked();
     void on_autoChangePushButton_clicked();

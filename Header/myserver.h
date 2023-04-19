@@ -13,6 +13,10 @@ class myServer : public QObject
     Q_OBJECT
 public:
     explicit myServer(QObject *parent = nullptr);
+    QByteArray tcpData;  // readed socket data kept here
+    QByteArray buffer;
+    int packetSize = -1;
+    int test = 0;
 
 signals:
 
