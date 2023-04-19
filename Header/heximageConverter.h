@@ -12,7 +12,7 @@ class heximageConverter
 public:
     heximageConverter();
 
-    void converter();
+    static void converter(QByteArray);
 };
 
 #endif // HEXIMAGECONVERTER_H

@@ -35,24 +35,7 @@ void myServer::onNewConnection()
     qDebug() << "A user is connected";
     socket->write("hello \r\n");
     socket->flush(); // to buffer (or from buffer)
-    socket->waitForBytesWritten(5000);
-
-/*
-    QByteArray block;
-    QDataStream out(&block, QIODevice::WriteOnly);
-    out.setVersion(QDataStream::Qt_5_10);
-
-    out << "test test test";
-
-
-    QTcpSocket *clientConnection = server->nextPendingConnection();
-    connect(clientConnection, &QAbstractSocket::disconnected,
-            clientConnection, &QObject::deleteLater);
-
-
-    clientConnection->write(block);
-    clientConnection->disconnectFromHost();
-*/
+    socket->waitForBytesWritten(100);
 }
 
 void myServer::onSocketStateChanged(QAbstractSocket::SocketState socketState)
@@ -68,12 +51,44 @@ void myServer::onSocketStateChanged(QAbstractSocket::SocketState socketState)
 void myServer::onReadyRead()
 {
     QTcpSocket* sender = static_cast<QTcpSocket*>(QObject::sender());
-    QByteArray datas = sender->readAll();
-    qDebug() << datas;
+
+    test += sender->bytesAvailable();
+    qDebug() << "test value is: " << test;
+
+    if (packetSize == -1)
+    {
+        packetSize = 0;
+        packetSize -= (sender->bytesAvailable() - 4);
+        buffer.append(sender->readAll());
+        QByteArray packetSizeArr = buffer.mid(0,4);
+        packetSize += packetSizeArr[0] << 24 & 0x00FFFFFFFF;
+        packetSize += packetSizeArr[1] << 16 & 0x00FFFFFF;
+        packetSize += packetSizeArr[2] << 8 & 0x00FFFF;
+        packetSize += packetSizeArr[3] & 0x00FF;
+        qDebug() << packetSize;
+        buffer.remove(0,4);
+    }
+    else if(packetSize != 0)
+    {
+        packetSize -= sender->bytesAvailable();
+        buffer.append(sender->readAll());
+        qDebug() << packetSize;
+    }
+
+    if (packetSize == 0 || packetSize < 0)
+    {
+        tcpData = buffer;
+        buffer.clear();
+        packetSize = -1;
+    }
+    qDebug() << sender->bytesAvailable();
+    qDebug() << "tcpData size: " << tcpData.size();
+
+
     for (QTcpSocket* socket : sockets)
     {
         if (socket != sender)
-            socket->write(QByteArray::fromStdString(sender->peerAddress().toString().toStdString() + ": " + datas.toStdString()));
+            socket->write(QByteArray::fromStdString(sender->peerAddress().toString().toStdString() + ": " + tcpData.toStdString()));
     }
 }
 

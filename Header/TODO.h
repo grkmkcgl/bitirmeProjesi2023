@@ -4,8 +4,7 @@
  * (should these images be saved or only currently displayed?)
  *
  *
- * implement hexToPixmap and TCP_Server projects to project.
- * TCP_Server may replace comm handler
+ * change qDebugs to qLabel or something like them to prevent opening of console
  *
  *
  *
