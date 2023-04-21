@@ -546,7 +546,20 @@
      <string>Previous</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="autoChangePushButton">
+   <widget class="QPushButton" name="tcpSocketPushButton">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>660</y>
+      <width>80</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Current</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="savedFilesPushButton">
     <property name="geometry">
      <rect>
       <x>30</x>
@@ -556,7 +569,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Current</string>
+     <string>Saved Files</string>
     </property>
    </widget>
   </widget>

@@ -7,6 +7,7 @@
 #include <QDirIterator>
 #include "RtspCamera.h"
 #include "myserver.h"
+#include "heximageConverter.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -41,7 +42,8 @@ private slots:
     void on_ConnectVideoButton_clicked();
     void on_nextimagepushButton_clicked();
     void on_previousimagepushButton_clicked();
-    void on_autoChangePushButton_clicked();
+    void on_tcpSocketPushButton_clicked();
+    void on_savedFilesPushButton_clicked();
 
 private:
     Ui::MainWindow *ui;

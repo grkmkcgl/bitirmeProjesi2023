@@ -12,7 +12,8 @@ class heximageConverter
 public:
     heximageConverter();
 
-    static void converter(QByteArray);
+    static void saveAsHex(QByteArray);
+    static void hexToPixmap(QByteArray);
 };
 
 #endif // HEXIMAGECONVERTER_H

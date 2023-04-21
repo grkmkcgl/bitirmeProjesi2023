@@ -5,7 +5,19 @@ heximageConverter::heximageConverter()
 
 }
 
-void heximageConverter::converter(QByteArray valueFromSocket)
+void heximageConverter::saveAsHex(QByteArray tcpArr)
+{
+    QByteArray buffer;
+    QDataStream out(&buffer, QIODevice::ReadWrite);
+    out << tcpArr;
+
+    QFile fileSaver("test.txt");
+    fileSaver.open(QIODevice::WriteOnly);
+    fileSaver.write(buffer);
+    fileSaver.close();
+}
+
+void heximageConverter::hexToPixmap(QByteArray valueFromSocket)
 {
     // load from txt file and show.
     QFile file("some_name.txt");

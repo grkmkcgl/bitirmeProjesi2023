@@ -52,9 +52,6 @@ void myServer::onReadyRead()
 {
     QTcpSocket* sender = static_cast<QTcpSocket*>(QObject::sender());
 
-    test += sender->bytesAvailable();
-    qDebug() << "test value is: " << test;
-
     if (packetSize == -1)
     {
         packetSize = 0;
@@ -65,14 +62,14 @@ void myServer::onReadyRead()
         packetSize += packetSizeArr[1] << 16 & 0x00FFFFFF;
         packetSize += packetSizeArr[2] << 8 & 0x00FFFF;
         packetSize += packetSizeArr[3] & 0x00FF;
-        qDebug() << packetSize;
-        buffer.remove(0,4);
+        qDebug() << "packetSize: " << packetSize;
+        buffer.remove(0,4);  // remove header
     }
     else if(packetSize != 0)
     {
         packetSize -= sender->bytesAvailable();
         buffer.append(sender->readAll());
-        qDebug() << packetSize;
+        qDebug() << "packetSize: " << packetSize;
     }
 
     if (packetSize == 0 || packetSize < 0)
@@ -81,10 +78,9 @@ void myServer::onReadyRead()
         buffer.clear();
         packetSize = -1;
     }
-    qDebug() << sender->bytesAvailable();
     qDebug() << "tcpData size: " << tcpData.size();
 
-
+    // idk what this is
     for (QTcpSocket* socket : sockets)
     {
         if (socket != sender)

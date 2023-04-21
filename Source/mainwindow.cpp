@@ -85,82 +85,56 @@ void MainWindow::on_previousimagepushButton_clicked()
     }
 }
 
-void MainWindow::on_autoChangePushButton_clicked()
+void MainWindow::on_tcpSocketPushButton_clicked()
 {
-//    QFile file("C:/Users/gorke/Desktop/QT/build-hexToPixmap-Desktop_Qt_5_15_2_MinGW_32_bit-Debug/some_name.txt");
-//    QByteArray test;
-
-//    if (!file.open(QIODevice::ReadOnly))
-//    {
-//        qDebug() << "couldn't open file!";
-//        return;
-//    }
-//    QDataStream stream(&file);
-//    stream >> test;
-//    file.close();
-
     QByteArray valueToUi = tcpServer->tcpData;
     QPixmap tcpDataImage;
     tcpDataImage.loadFromData(valueToUi);
     imageLabel->setPixmap(tcpDataImage);
+    heximageConverter::saveAsHex(tcpServer->tcpData);
 
 
+}
 
 
+void MainWindow::on_savedFilesPushButton_clicked()
+{
+    QDirIterator dir("../../treePhotos",
+                   QStringList() << "*.jpg",
+                   QDir::Files,
+                   QDirIterator::Subdirectories);
 
+    int newFiles = 0;
+    while (dir.hasNext())
+    {
+        newFiles += 1;
+        dir.next();
+    }
 
+    if (newFiles != jpgList.length())
+    {
+        delete it;
+        it = new QDirIterator("../../treePhotos",
+                           QStringList() << "*.jpg",
+                           QDir::Files,
+                           QDirIterator::Subdirectories);
+        filesChanged = true;
+        newFiles = 0;
+        jpgList.clear();
+    }
 
+    while(it->hasNext() && filesChanged)
+    {
+        ui->statusbar->showMessage("Copying paths...");
+        ui->statusbar->setStyleSheet("background-color: rgb(122, 0, 0);");
+        jpgList.append(it->next());
+    }
+    filesChanged = false;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//    QDirIterator dir("../../treePhotos",
-//                   QStringList() << "*.jpg",
-//                   QDir::Files,
-//                   QDirIterator::Subdirectories);
-
-//    int newFiles = 0;
-//    while (dir.hasNext())
-//    {
-//        newFiles += 1;
-//        dir.next();
-//    }
-
-//    if (newFiles != jpgList.length())
-//    {
-//        delete it;
-//        it = new QDirIterator("../../treePhotos",
-//                           QStringList() << "*.jpg",
-//                           QDir::Files,
-//                           QDirIterator::Subdirectories);
-//        filesChanged = true;
-//        newFiles = 0;
-//        jpgList.clear();
-//    }
-
-//    while(it->hasNext() && filesChanged)
-//    {
-//        ui->statusbar->showMessage("Copying paths...");
-//        ui->statusbar->setStyleSheet("background-color: rgb(122, 0, 0);");
-//        jpgList.append(it->next());
-//    }
-//    filesChanged = false;
-
-//    jpgListIndex = jpgList.length() - 1;
-//    ui->statusbar->showMessage(QString("Done! Found %1 images.").arg(jpgList.length()));
-//    ui->statusbar->setStyleSheet("background-color: rgb(0, 255, 0);");
-//    image.load(jpgList[jpgListIndex]);
-//    imageLabel->setPixmap(image);
+    jpgListIndex = jpgList.length() - 1;
+    ui->statusbar->showMessage(QString("Done! Found %1 images.").arg(jpgList.length()));
+    ui->statusbar->setStyleSheet("background-color: rgb(0, 255, 0);");
+    image.load(jpgList[jpgListIndex]);
+    imageLabel->setPixmap(image);
 }
 
