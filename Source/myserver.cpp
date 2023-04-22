@@ -9,11 +9,11 @@ myServer::myServer(QObject *parent)
     // listen for new connection
     if(!server->listen(QHostAddress::Any, 1234))
     {
-       qDebug() << "Server could not start...";
+       serverRunning = false;
     }
     else
     {
-       qDebug() << "Server started successfully!";
+       serverRunning = true;
     }
 
 //    qDebug() << QNetworkInterface::allAddresses();
@@ -51,18 +51,22 @@ void myServer::onSocketStateChanged(QAbstractSocket::SocketState socketState)
 void myServer::onReadyRead()
 {
     QTcpSocket* sender = static_cast<QTcpSocket*>(QObject::sender());
-
     if (packetSize == -1)
     {
+        int test = 0;
         packetSize = 0;
         packetSize -= (sender->bytesAvailable() - 4);
         buffer.append(sender->readAll());
         QByteArray packetSizeArr = buffer.mid(0,4);
         packetSize += packetSizeArr[0] << 24 & 0x00FFFFFFFF;
+        test += packetSizeArr[0] << 24 & 0x00FFFFFFFF;
         packetSize += packetSizeArr[1] << 16 & 0x00FFFFFF;
+        test += packetSizeArr[1] << 16 & 0x00FFFFFF;
         packetSize += packetSizeArr[2] << 8 & 0x00FFFF;
+        test += packetSizeArr[2] << 8 & 0x00FFFF;
         packetSize += packetSizeArr[3] & 0x00FF;
-        qDebug() << "packetSize: " << packetSize;
+        test += packetSizeArr[3] & 0x00FF;
+        qDebug() << "packetSize: " << packetSize << "whole packet: " << test;
         buffer.remove(0,4);  // remove header
     }
     else if(packetSize != 0)

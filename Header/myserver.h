@@ -16,6 +16,7 @@ public:
     QByteArray tcpData;  // readed socket data kept here
     QByteArray buffer;
     int packetSize = -1;
+    bool serverRunning = false;
 
 signals:
 

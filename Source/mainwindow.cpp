@@ -24,7 +24,23 @@ MainWindow::MainWindow(QWidget *parent)
                        QDir::Files,
                        QDirIterator::Subdirectories);
 
+    // init server
     tcpServer = new myServer;
+    if (tcpServer->serverRunning == false)
+    {
+        ui->serverStatusLabel->setText("TCP Server couldn't start...");
+        ui->serverStatusLabel->setStyleSheet("QLabel { color : red; }");
+    }
+    else
+    {
+        ui->serverStatusLabel->setText("TCP Server started successfully!");
+        ui->serverStatusLabel->setStyleSheet("QLabel { color : green; }");
+    }
+
+    // logo
+    QPixmap logo("C:/Users/gorke/Desktop/QT/bitirmeProjesiArayuz/Resource/tubitak.png");
+    ui->tubitakLabel->setScaledContents(true);
+    ui->tubitakLabel->setPixmap(logo);
 }
 
 MainWindow::~MainWindow()
@@ -92,8 +108,7 @@ void MainWindow::on_tcpSocketPushButton_clicked()
     tcpDataImage.loadFromData(valueToUi);
     imageLabel->setPixmap(tcpDataImage);
     heximageConverter::saveAsHex(tcpServer->tcpData);
-
-
+    tcpServer->packetSize = -1; // reset packet size to take new input
 }
 
 
