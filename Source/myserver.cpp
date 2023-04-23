@@ -33,7 +33,7 @@ void myServer::onNewConnection()
         socket->write(QByteArray::fromStdString(socket->peerAddress().toString().toStdString() + " connected to server !\n"));
     }
 
-    qDebug() << "A user is connected";
+//    qDebug() << "A user is connected";
     socket->write("hello \r\n");
     socket->flush(); // to buffer (or from buffer)
     socket->waitForBytesWritten(100);
@@ -46,7 +46,7 @@ void myServer::onSocketStateChanged(QAbstractSocket::SocketState socketState)
     {
         QTcpSocket* sender = static_cast<QTcpSocket*>(QObject::sender());
         sockets.removeOne(sender);
-        qDebug() << "A user disconnected from server";
+//        qDebug() << "A user disconnected from server";
         emit menuConnectedSignal(false);
     }
 }

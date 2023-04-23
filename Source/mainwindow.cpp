@@ -108,9 +108,16 @@ void MainWindow::on_tcpSocketPushButton_clicked()
 {
     QByteArray valueToUi = tcpServer->tcpData;
     QPixmap tcpDataImage;
-    tcpDataImage.loadFromData(valueToUi);
+    bool imageLoaded = tcpDataImage.loadFromData(valueToUi);
+    if (!imageLoaded)
+    {
+        ui->serverStatusLabel->setText("IMAGE CORRUPTED");
+        return;
+    }
+    else
+        ui->serverStatusLabel->setText("Image taken successfully");
     imageLabel->setPixmap(tcpDataImage);
-    heximageConverter::saveAsHex(tcpServer->tcpData);
+    heximageConverter::saveAsHex(tcpServer->tcpData);  // save taken data as hex
     tcpServer->packetSize = -1; // reset packet size to take new input
 }
 
@@ -152,7 +159,14 @@ void MainWindow::on_savedFilesPushButton_clicked()
     jpgListIndex = jpgList.length() - 1;
     ui->statusbar->showMessage(QString("Done! Found %1 images.").arg(jpgList.length()));
     ui->statusbar->setStyleSheet("background-color: rgb(0, 255, 0);");
-    image.load(jpgList[jpgListIndex]);
+    if (jpgListIndex == -1)
+    {
+        ui->statusbar->showMessage("Wrong path or missing files...");
+        ui->statusbar->setStyleSheet("background-color: rgb(122, 0, 0);");
+        return;
+    }
+    else
+        image.load(jpgList[jpgListIndex]);
     imageLabel->setPixmap(image);
 }
 
