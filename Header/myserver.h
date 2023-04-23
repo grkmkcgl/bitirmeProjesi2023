@@ -18,7 +18,10 @@ public:
     int packetSize = -1;
     bool serverRunning = false;
 
+    QTcpServer *server;
+
 signals:
+    bool menuConnectedSignal(bool);
 
 public slots:
     void onNewConnection();
@@ -27,7 +30,6 @@ public slots:
     void sendSomething();
 
 private:
-    QTcpServer *server;
     QList<QTcpSocket*>  sockets;
 
 };

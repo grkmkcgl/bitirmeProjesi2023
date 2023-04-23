@@ -1,4 +1,5 @@
 #include "myserver.h"
+#include "ui_mainwindow.h"
 
 myServer::myServer(QObject *parent)
     : QObject{parent}
@@ -36,6 +37,7 @@ void myServer::onNewConnection()
     socket->write("hello \r\n");
     socket->flush(); // to buffer (or from buffer)
     socket->waitForBytesWritten(100);
+    emit menuConnectedSignal(true);
 }
 
 void myServer::onSocketStateChanged(QAbstractSocket::SocketState socketState)
@@ -45,6 +47,7 @@ void myServer::onSocketStateChanged(QAbstractSocket::SocketState socketState)
         QTcpSocket* sender = static_cast<QTcpSocket*>(QObject::sender());
         sockets.removeOne(sender);
         qDebug() << "A user disconnected from server";
+        emit menuConnectedSignal(false);
     }
 }
 

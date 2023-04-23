@@ -41,6 +41,9 @@ MainWindow::MainWindow(QWidget *parent)
     QPixmap logo("C:/Users/gorke/Desktop/QT/bitirmeProjesiArayuz/Resource/tubitak.png");
     ui->tubitakLabel->setScaledContents(true);
     ui->tubitakLabel->setPixmap(logo);
+
+    connect(tcpServer, SIGNAL(menuConnectedSignal(bool)),
+            this, SLOT(serverSignals(bool)));
 }
 
 MainWindow::~MainWindow()
@@ -151,5 +154,15 @@ void MainWindow::on_savedFilesPushButton_clicked()
     ui->statusbar->setStyleSheet("background-color: rgb(0, 255, 0);");
     image.load(jpgList[jpgListIndex]);
     imageLabel->setPixmap(image);
+}
+
+void MainWindow::serverSignals(bool user)
+{
+    if (user == true)
+    {
+        ui->serverStatusLabel->setText("A user connected");
+    }
+    else
+        ui->serverStatusLabel->setText("A user disconnected");
 }
 

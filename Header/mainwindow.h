@@ -36,6 +36,9 @@ public:
     // init server
     myServer *tcpServer;
 
+public slots:
+    void serverSignals(bool);
+
 private slots:
     void on_progressBar_valueChanged(int value);
     void on_startVideoConnectionButton_clicked();
@@ -45,7 +48,7 @@ private slots:
     void on_tcpSocketPushButton_clicked();
     void on_savedFilesPushButton_clicked();
 
-private:
+public:
     Ui::MainWindow *ui;
 };
 #endif // MAINWINDOW_H

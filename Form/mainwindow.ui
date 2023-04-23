@@ -80,7 +80,7 @@
      </font>
     </property>
     <property name="text">
-     <string>Detection</string>
+     <string>IMAGES</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
@@ -603,7 +603,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>TextLabel</string>
+     <string>tubitakLogo</string>
     </property>
    </widget>
   </widget>
