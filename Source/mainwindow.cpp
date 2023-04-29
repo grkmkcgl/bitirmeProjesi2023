@@ -38,9 +38,13 @@ MainWindow::MainWindow(QWidget *parent)
     }
 
     // logo
-    QPixmap logo("C:/Users/gorke/Desktop/QT/bitirmeProjesiArayuz/Resource/tubitak.png");
+    QPixmap tubitaklogo("C:/Users/gorke/Desktop/QT/bitirmeProjesiArayuz/Resource/tubitak.png");
     ui->tubitakLabel->setScaledContents(true);
-    ui->tubitakLabel->setPixmap(logo);
+    ui->tubitakLabel->setPixmap(tubitaklogo);
+
+    QPixmap estulogo("C:/Users/gorke/Desktop/QT/bitirmeProjesiArayuz/Resource/estu_logo.png");
+    ui->estuLogoLabel->setScaledContents(true);
+    ui->estuLogoLabel->setPixmap(estulogo);
 
     connect(tcpServer, SIGNAL(menuConnectedSignal(bool)),
             this, SLOT(serverSignals(bool)));

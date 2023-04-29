@@ -606,6 +606,19 @@
      <string>tubitakLogo</string>
     </property>
    </widget>
+   <widget class="QLabel" name="estuLogoLabel">
+    <property name="geometry">
+     <rect>
+      <x>520</x>
+      <y>630</y>
+      <width>81</width>
+      <height>71</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>estuLogo</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
