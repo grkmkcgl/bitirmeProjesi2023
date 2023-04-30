@@ -42,11 +42,12 @@ public slots:
 private slots:
     void on_progressBar_valueChanged(int value);
     void on_startVideoConnectionButton_clicked();
-    void on_ConnectVideoButton_clicked();
     void on_nextimagepushButton_clicked();
     void on_previousimagepushButton_clicked();
     void on_tcpSocketPushButton_clicked();
     void on_savedFilesPushButton_clicked();
+
+    void on_sendMsgToDetectButton_clicked();
 
 public:
     Ui::MainWindow *ui;

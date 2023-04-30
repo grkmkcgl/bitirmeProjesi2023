@@ -95,21 +95,18 @@ void myServer::onReadyRead()
     }
 }
 
-void myServer::sendSomething()
+void myServer::sendMessage(QString msg)
 {
+    QByteArray myMsg = msg.toUtf8();
 
-    QByteArray block;
-    QDataStream out(&block, QIODevice::WriteOnly);
-    out.setVersion(QDataStream::Qt_5_10);
-
-    out << "test test test";
-
-
-    QTcpSocket *clientConnection = server->nextPendingConnection();
-    connect(clientConnection, &QAbstractSocket::disconnected,
-            clientConnection, &QObject::deleteLater);
-
-
-    clientConnection->write(block);
-    clientConnection->disconnectFromHost();
+    for (QTcpSocket* socket : sockets)
+    {
+        socket->write(myMsg);
+        socket->flush();
+        socket->waitForBytesWritten(10);
+    }
+//    QTcpSocket *clientConnection = server->nextPendingConnection();
+//    connect(clientConnection, &QAbstractSocket::disconnected,
+//            clientConnection, &QObject::deleteLater);
+//    clientConnection->write(block);
 }

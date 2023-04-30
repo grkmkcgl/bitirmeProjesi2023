@@ -494,17 +494,17 @@
      <string>Start Camera</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="ConnectVideoButton">
+   <widget class="QPushButton" name="sendMsgToDetectButton">
     <property name="geometry">
      <rect>
-      <x>830</x>
-      <y>630</y>
-      <width>91</width>
+      <x>120</x>
+      <y>660</y>
+      <width>121</width>
       <height>24</height>
      </rect>
     </property>
     <property name="text">
-     <string>Connect Camera</string>
+     <string>Send Msg To Detect</string>
     </property>
    </widget>
    <widget class="QPushButton" name="showMessagesButton">

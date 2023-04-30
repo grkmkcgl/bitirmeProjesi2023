@@ -65,11 +65,6 @@ void MainWindow::on_startVideoConnectionButton_clicked()
     RtspCamera.initVideo();
 }
 
-void MainWindow::on_ConnectVideoButton_clicked()
-{
-    RtspCamera.connectVideo();
-}
-
 void MainWindow::on_nextimagepushButton_clicked()
 {
     if (!jpgList.isEmpty())
@@ -182,5 +177,11 @@ void MainWindow::serverSignals(bool user)
     }
     else
         ui->serverStatusLabel->setText("A user disconnected");
+}
+
+
+void MainWindow::on_sendMsgToDetectButton_clicked()
+{
+    tcpServer->sendMessage("bringMeNew");
 }
 

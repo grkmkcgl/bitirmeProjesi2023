@@ -27,7 +27,7 @@ public slots:
     void onNewConnection();
     void onReadyRead();
     void onSocketStateChanged(QAbstractSocket::SocketState socketState);
-    void sendSomething();
+    void sendMessage(QString);
 
 private:
     QList<QTcpSocket*>  sockets;
