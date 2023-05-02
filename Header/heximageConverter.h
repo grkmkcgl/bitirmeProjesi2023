@@ -13,6 +13,7 @@ public:
     heximageConverter();
 
     static void saveAsHex(QByteArray);
+    static void imageSaver(QByteArray, int);
     static void hexToPixmap(QByteArray);
 };
 

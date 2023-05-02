@@ -19,7 +19,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->ImageViewer->setLayout(imageViewerLayout);
 
     // image iterator
-    it = new QDirIterator("../../../treePhotos",
+    it = new QDirIterator(imagesPath,
                        QStringList() << "*.jpg",
                        QDir::Files,
                        QDirIterator::Subdirectories);
@@ -46,18 +46,14 @@ MainWindow::MainWindow(QWidget *parent)
     ui->estuLogoLabel->setScaledContents(true);
     ui->estuLogoLabel->setPixmap(estulogo);
 
-    connect(tcpServer, SIGNAL(menuConnectedSignal(bool)),
-            this, SLOT(serverSignals(bool)));
+    connect(tcpServer, SIGNAL(menuConnectedSignal(bool)), this, SLOT(serverSignals(bool)));
+    connect(tcpServer, SIGNAL(imageTaken(bool)), this, SLOT(imageTaken(bool)));
+
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
-}
-
-void MainWindow::on_progressBar_valueChanged(int value)
-{
-
 }
 
 void MainWindow::on_startVideoConnectionButton_clicked()
@@ -116,14 +112,16 @@ void MainWindow::on_tcpSocketPushButton_clicked()
     else
         ui->serverStatusLabel->setText("Image taken successfully");
     imageLabel->setPixmap(tcpDataImage);
-    heximageConverter::saveAsHex(tcpServer->tcpData);  // save taken data as hex
+    heximageConverter::imageSaver(tcpServer->tcpData, imageFileNumber);  // save taken data as hex
     tcpServer->packetSize = -1; // reset packet size to take new input
+    imageFileNumber += 1;
+    ui->noOfApplesLCD->display(tcpServer->noOfApples);
 }
 
 
 void MainWindow::on_savedFilesPushButton_clicked()
 {
-    QDirIterator dir("../../treePhotos",
+    QDirIterator dir(imagesPath,
                    QStringList() << "*.jpg",
                    QDir::Files,
                    QDirIterator::Subdirectories);
@@ -138,7 +136,7 @@ void MainWindow::on_savedFilesPushButton_clicked()
     if (newFiles != jpgList.length())
     {
         delete it;
-        it = new QDirIterator("../../treePhotos",
+        it = new QDirIterator(imagesPath,
                            QStringList() << "*.jpg",
                            QDir::Files,
                            QDirIterator::Subdirectories);
@@ -179,9 +177,21 @@ void MainWindow::serverSignals(bool user)
         ui->serverStatusLabel->setText("A user disconnected");
 }
 
+void MainWindow::imageTaken(bool value)
+{
+    if (value == true)
+    {
+        this->on_tcpSocketPushButton_clicked();
+    }
+}
 
 void MainWindow::on_sendMsgToDetectButton_clicked()
 {
     tcpServer->sendMessage("bringMeNew");
+}
+
+void MainWindow::on_batteryBar_valueChanged(int value)
+{
+
 }
 

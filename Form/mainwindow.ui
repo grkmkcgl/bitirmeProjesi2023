@@ -139,7 +139,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QProgressBar" name="progressBar">
+        <widget class="QProgressBar" name="batteryBar">
          <property name="font">
           <font>
            <family>Consolas</family>
@@ -205,7 +205,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLCDNumber" name="lcdNumber_4">
+        <widget class="QLCDNumber" name="altitudeLCD">
          <property name="frameShape">
           <enum>QFrame::Box</enum>
          </property>
@@ -271,7 +271,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLCDNumber" name="lcdNumber">
+        <widget class="QLCDNumber" name="speedLCD">
          <property name="frameShape">
           <enum>QFrame::Box</enum>
          </property>
@@ -337,7 +337,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLCDNumber" name="lcdNumber_2">
+        <widget class="QLCDNumber" name="noOfApplesLCD">
          <property name="frameShape">
           <enum>QFrame::Box</enum>
          </property>
@@ -403,7 +403,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLCDNumber" name="lcdNumber_3">
+        <widget class="QLCDNumber" name="noOfTreesLCD">
          <property name="frameShape">
           <enum>QFrame::Box</enum>
          </property>

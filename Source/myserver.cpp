@@ -33,7 +33,6 @@ void myServer::onNewConnection()
         socket->write(QByteArray::fromStdString(socket->peerAddress().toString().toStdString() + " connected to server !\n"));
     }
 
-//    qDebug() << "A user is connected";
     socket->write("hello \r\n");
     socket->flush(); // to buffer (or from buffer)
     socket->waitForBytesWritten(100);
@@ -56,20 +55,20 @@ void myServer::onReadyRead()
     QTcpSocket* sender = static_cast<QTcpSocket*>(QObject::sender());
     if (packetSize == -1)
     {
-        int test = 0;
+        wholeData = 0;
         packetSize = 0;
         packetSize -= (sender->bytesAvailable() - 4);
         buffer.append(sender->readAll());
         QByteArray packetSizeArr = buffer.mid(0,4);
         packetSize += packetSizeArr[0] << 24 & 0x00FFFFFFFF;
-        test += packetSizeArr[0] << 24 & 0x00FFFFFFFF;
+        wholeData += packetSizeArr[0] << 24 & 0x00FFFFFFFF;
         packetSize += packetSizeArr[1] << 16 & 0x00FFFFFF;
-        test += packetSizeArr[1] << 16 & 0x00FFFFFF;
+        wholeData += packetSizeArr[1] << 16 & 0x00FFFFFF;
         packetSize += packetSizeArr[2] << 8 & 0x00FFFF;
-        test += packetSizeArr[2] << 8 & 0x00FFFF;
+        wholeData += packetSizeArr[2] << 8 & 0x00FFFF;
         packetSize += packetSizeArr[3] & 0x00FF;
-        test += packetSizeArr[3] & 0x00FF;
-        qDebug() << "packetSize: " << packetSize << "whole packet: " << test;
+        wholeData += packetSizeArr[3] & 0x00FF;
+//        qDebug() << "packetSize: " << packetSize << "whole packet: " << wholeData;
         buffer.remove(0,4);  // remove header
     }
     else if(packetSize != 0)
@@ -81,9 +80,15 @@ void myServer::onReadyRead()
 
     if (packetSize == 0 || packetSize < 0)
     {
-        tcpData = buffer;
+        tcpData = buffer.left(wholeData);
+        QByteArray noOfApplesArr = buffer.right(4);
+        QDataStream ds(noOfApplesArr);
+        int newNoOfApples;
+        ds >> newNoOfApples;
+        noOfApples += newNoOfApples;
         buffer.clear();
         packetSize = -1;
+        emit imageTaken(true);
     }
     qDebug() << "tcpData size: " << tcpData.size();
 

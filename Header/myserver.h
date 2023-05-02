@@ -15,6 +15,8 @@ public:
     explicit myServer(QObject *parent = nullptr);
     QByteArray tcpData;  // readed socket data kept here
     QByteArray buffer;
+    int noOfApples = 0;
+    int wholeData = 0;
     int packetSize = -1;
     bool serverRunning = false;
 
@@ -22,6 +24,7 @@ public:
 
 signals:
     bool menuConnectedSignal(bool);
+    bool imageTaken(bool);
 
 public slots:
     void onNewConnection();
