@@ -19,12 +19,36 @@ MainWindow::MainWindow(QWidget *parent)
     ui->ImageViewer->setLayout(imageViewerLayout);
 
     // image iterator
-    it = new QDirIterator("../../../treePhotos",
+    it = new QDirIterator(imagesPath,
                        QStringList() << "*.jpg",
                        QDir::Files,
                        QDirIterator::Subdirectories);
 
+    // init server
     tcpServer = new myServer;
+    if (tcpServer->serverRunning == false)
+    {
+        ui->serverStatusLabel->setText("TCP Server couldn't start...");
+        ui->serverStatusLabel->setStyleSheet("QLabel { color : red; }");
+    }
+    else
+    {
+        ui->serverStatusLabel->setText("TCP Server started successfully!");
+        ui->serverStatusLabel->setStyleSheet("QLabel { color : green; }");
+    }
+
+    // logo
+    QPixmap tubitaklogo("C:/Users/gorke/Desktop/QT/bitirmeProjesiArayuz/Resource/tubitak.png");
+    ui->tubitakLabel->setScaledContents(true);
+    ui->tubitakLabel->setPixmap(tubitaklogo);
+
+    QPixmap estulogo("C:/Users/gorke/Desktop/QT/bitirmeProjesiArayuz/Resource/estu_logo.png");
+    ui->estuLogoLabel->setScaledContents(true);
+    ui->estuLogoLabel->setPixmap(estulogo);
+
+    connect(tcpServer, SIGNAL(menuConnectedSignal(bool)), this, SLOT(serverSignals(bool)));
+    connect(tcpServer, SIGNAL(imageTaken(bool)), this, SLOT(imageTaken(bool)));
+
 }
 
 MainWindow::~MainWindow()
@@ -32,19 +56,9 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::on_progressBar_valueChanged(int value)
-{
-
-}
-
 void MainWindow::on_startVideoConnectionButton_clicked()
 {
     RtspCamera.initVideo();
-}
-
-void MainWindow::on_ConnectVideoButton_clicked()
-{
-    RtspCamera.connectVideo();
 }
 
 void MainWindow::on_nextimagepushButton_clicked()
@@ -85,82 +99,99 @@ void MainWindow::on_previousimagepushButton_clicked()
     }
 }
 
-void MainWindow::on_autoChangePushButton_clicked()
+void MainWindow::on_tcpSocketPushButton_clicked()
 {
-//    QFile file("C:/Users/gorke/Desktop/QT/build-hexToPixmap-Desktop_Qt_5_15_2_MinGW_32_bit-Debug/some_name.txt");
-//    QByteArray test;
-
-//    if (!file.open(QIODevice::ReadOnly))
-//    {
-//        qDebug() << "couldn't open file!";
-//        return;
-//    }
-//    QDataStream stream(&file);
-//    stream >> test;
-//    file.close();
-
     QByteArray valueToUi = tcpServer->tcpData;
     QPixmap tcpDataImage;
-    tcpDataImage.loadFromData(valueToUi);
+    bool imageLoaded = tcpDataImage.loadFromData(valueToUi);
+    if (!imageLoaded)
+    {
+        ui->serverStatusLabel->setText("IMAGE CORRUPTED");
+        return;
+    }
+    else
+        ui->serverStatusLabel->setText("Image taken successfully");
     imageLabel->setPixmap(tcpDataImage);
+    heximageConverter::imageSaver(tcpServer->tcpData, imageFileNumber);  // save taken data as hex
+    tcpServer->packetSize = -1; // reset packet size to take new input
+    imageFileNumber += 1;
+    ui->noOfApplesLCD->display(tcpServer->noOfApples);
+}
 
 
+void MainWindow::on_savedFilesPushButton_clicked()
+{
+    QDirIterator dir(imagesPath,
+                   QStringList() << "*.jpg",
+                   QDir::Files,
+                   QDirIterator::Subdirectories);
 
+    int newFiles = 0;
+    while (dir.hasNext())
+    {
+        newFiles += 1;
+        dir.next();
+    }
 
+    if (newFiles != jpgList.length())
+    {
+        delete it;
+        it = new QDirIterator(imagesPath,
+                           QStringList() << "*.jpg",
+                           QDir::Files,
+                           QDirIterator::Subdirectories);
+        filesChanged = true;
+        newFiles = 0;
+        jpgList.clear();
+    }
 
+    while(it->hasNext() && filesChanged)
+    {
+        ui->statusbar->showMessage("Copying paths...");
+        ui->statusbar->setStyleSheet("background-color: rgb(122, 0, 0);");
+        jpgList.append(it->next());
+    }
+    filesChanged = false;
 
+    jpgListIndex = jpgList.length() - 1;
+    ui->statusbar->showMessage(QString("Done! Found %1 images.").arg(jpgList.length()));
+    ui->statusbar->setStyleSheet("background-color: rgb(0, 255, 0);");
+    if (jpgListIndex == -1)
+    {
+        ui->statusbar->showMessage("Wrong path or missing files...");
+        ui->statusbar->setStyleSheet("background-color: rgb(122, 0, 0);");
+        return;
+    }
+    else
+        image.load(jpgList[jpgListIndex]);
+    imageLabel->setPixmap(image);
+}
 
+void MainWindow::serverSignals(bool user)
+{
+    if (user == true)
+    {
+        ui->serverStatusLabel->setText("A user connected");
+    }
+    else
+        ui->serverStatusLabel->setText("A user disconnected");
+}
 
+void MainWindow::imageTaken(bool value)
+{
+    if (value == true)
+    {
+        this->on_tcpSocketPushButton_clicked();
+    }
+}
 
+void MainWindow::on_sendMsgToDetectButton_clicked()
+{
+    tcpServer->sendMessage("bringMeNew");
+}
 
+void MainWindow::on_batteryBar_valueChanged(int value)
+{
 
-
-
-
-
-
-
-
-
-
-
-
-//    QDirIterator dir("../../treePhotos",
-//                   QStringList() << "*.jpg",
-//                   QDir::Files,
-//                   QDirIterator::Subdirectories);
-
-//    int newFiles = 0;
-//    while (dir.hasNext())
-//    {
-//        newFiles += 1;
-//        dir.next();
-//    }
-
-//    if (newFiles != jpgList.length())
-//    {
-//        delete it;
-//        it = new QDirIterator("../../treePhotos",
-//                           QStringList() << "*.jpg",
-//                           QDir::Files,
-//                           QDirIterator::Subdirectories);
-//        filesChanged = true;
-//        newFiles = 0;
-//        jpgList.clear();
-//    }
-
-//    while(it->hasNext() && filesChanged)
-//    {
-//        ui->statusbar->showMessage("Copying paths...");
-//        ui->statusbar->setStyleSheet("background-color: rgb(122, 0, 0);");
-//        jpgList.append(it->next());
-//    }
-//    filesChanged = false;
-
-//    jpgListIndex = jpgList.length() - 1;
-//    ui->statusbar->showMessage(QString("Done! Found %1 images.").arg(jpgList.length()));
-//    ui->statusbar->setStyleSheet("background-color: rgb(0, 255, 0);");
-//    image.load(jpgList[jpgListIndex]);
-//    imageLabel->setPixmap(image);
 }
 

@@ -80,7 +80,7 @@
      </font>
     </property>
     <property name="text">
-     <string>Detection</string>
+     <string>IMAGES</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
@@ -139,7 +139,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QProgressBar" name="progressBar">
+        <widget class="QProgressBar" name="batteryBar">
          <property name="font">
           <font>
            <family>Consolas</family>
@@ -205,7 +205,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLCDNumber" name="lcdNumber_4">
+        <widget class="QLCDNumber" name="altitudeLCD">
          <property name="frameShape">
           <enum>QFrame::Box</enum>
          </property>
@@ -271,7 +271,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLCDNumber" name="lcdNumber">
+        <widget class="QLCDNumber" name="speedLCD">
          <property name="frameShape">
           <enum>QFrame::Box</enum>
          </property>
@@ -337,7 +337,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLCDNumber" name="lcdNumber_2">
+        <widget class="QLCDNumber" name="noOfApplesLCD">
          <property name="frameShape">
           <enum>QFrame::Box</enum>
          </property>
@@ -403,7 +403,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLCDNumber" name="lcdNumber_3">
+        <widget class="QLCDNumber" name="noOfTreesLCD">
          <property name="frameShape">
           <enum>QFrame::Box</enum>
          </property>
@@ -494,17 +494,17 @@
      <string>Start Camera</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="ConnectVideoButton">
+   <widget class="QPushButton" name="sendMsgToDetectButton">
     <property name="geometry">
      <rect>
-      <x>830</x>
-      <y>630</y>
-      <width>91</width>
+      <x>120</x>
+      <y>660</y>
+      <width>121</width>
       <height>24</height>
      </rect>
     </property>
     <property name="text">
-     <string>Connect Camera</string>
+     <string>Send Msg To Detect</string>
     </property>
    </widget>
    <widget class="QPushButton" name="showMessagesButton">
@@ -546,7 +546,20 @@
      <string>Previous</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="autoChangePushButton">
+   <widget class="QPushButton" name="tcpSocketPushButton">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>660</y>
+      <width>80</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Current</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="savedFilesPushButton">
     <property name="geometry">
      <rect>
       <x>30</x>
@@ -556,7 +569,54 @@
      </rect>
     </property>
     <property name="text">
-     <string>Current</string>
+     <string>Saved Files</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="serverStatusLabel">
+    <property name="geometry">
+     <rect>
+      <x>1010</x>
+      <y>680</y>
+      <width>260</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>11</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;TextLabel&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="tubitakLabel">
+    <property name="geometry">
+     <rect>
+      <x>1090</x>
+      <y>0</y>
+      <width>190</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>tubitakLogo</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="estuLogoLabel">
+    <property name="geometry">
+     <rect>
+      <x>520</x>
+      <y>630</y>
+      <width>81</width>
+      <height>71</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>estuLogo</string>
     </property>
    </widget>
   </widget>

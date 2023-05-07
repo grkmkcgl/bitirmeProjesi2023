@@ -1,4 +1,5 @@
 #include "myserver.h"
+#include "ui_mainwindow.h"
 
 myServer::myServer(QObject *parent)
     : QObject{parent}
@@ -9,11 +10,11 @@ myServer::myServer(QObject *parent)
     // listen for new connection
     if(!server->listen(QHostAddress::Any, 1234))
     {
-       qDebug() << "Server could not start...";
+       serverRunning = false;
     }
     else
     {
-       qDebug() << "Server started successfully!";
+       serverRunning = true;
     }
 
 //    qDebug() << QNetworkInterface::allAddresses();
@@ -32,10 +33,10 @@ void myServer::onNewConnection()
         socket->write(QByteArray::fromStdString(socket->peerAddress().toString().toStdString() + " connected to server !\n"));
     }
 
-    qDebug() << "A user is connected";
     socket->write("hello \r\n");
     socket->flush(); // to buffer (or from buffer)
     socket->waitForBytesWritten(100);
+    emit menuConnectedSignal(true);
 }
 
 void myServer::onSocketStateChanged(QAbstractSocket::SocketState socketState)
@@ -44,47 +45,54 @@ void myServer::onSocketStateChanged(QAbstractSocket::SocketState socketState)
     {
         QTcpSocket* sender = static_cast<QTcpSocket*>(QObject::sender());
         sockets.removeOne(sender);
-        qDebug() << "A user disconnected from server";
+//        qDebug() << "A user disconnected from server";
+        emit menuConnectedSignal(false);
     }
 }
 
 void myServer::onReadyRead()
 {
     QTcpSocket* sender = static_cast<QTcpSocket*>(QObject::sender());
-
-    test += sender->bytesAvailable();
-    qDebug() << "test value is: " << test;
-
     if (packetSize == -1)
     {
+        wholeData = 0;
         packetSize = 0;
         packetSize -= (sender->bytesAvailable() - 4);
         buffer.append(sender->readAll());
         QByteArray packetSizeArr = buffer.mid(0,4);
         packetSize += packetSizeArr[0] << 24 & 0x00FFFFFFFF;
+        wholeData += packetSizeArr[0] << 24 & 0x00FFFFFFFF;
         packetSize += packetSizeArr[1] << 16 & 0x00FFFFFF;
+        wholeData += packetSizeArr[1] << 16 & 0x00FFFFFF;
         packetSize += packetSizeArr[2] << 8 & 0x00FFFF;
+        wholeData += packetSizeArr[2] << 8 & 0x00FFFF;
         packetSize += packetSizeArr[3] & 0x00FF;
-        qDebug() << packetSize;
-        buffer.remove(0,4);
+        wholeData += packetSizeArr[3] & 0x00FF;
+//        qDebug() << "packetSize: " << packetSize << "whole packet: " << wholeData;
+        buffer.remove(0,4);  // remove header
     }
     else if(packetSize != 0)
     {
         packetSize -= sender->bytesAvailable();
         buffer.append(sender->readAll());
-        qDebug() << packetSize;
+        qDebug() << "packetSize: " << packetSize;
     }
 
     if (packetSize == 0 || packetSize < 0)
     {
-        tcpData = buffer;
+        tcpData = buffer.left(wholeData);
+        QByteArray noOfApplesArr = buffer.right(4);
+        QDataStream ds(noOfApplesArr);
+        int newNoOfApples;
+        ds >> newNoOfApples;
+        noOfApples += newNoOfApples;
         buffer.clear();
         packetSize = -1;
+        emit imageTaken(true);
     }
-    qDebug() << sender->bytesAvailable();
     qDebug() << "tcpData size: " << tcpData.size();
 
-
+    // idk what this is
     for (QTcpSocket* socket : sockets)
     {
         if (socket != sender)
@@ -92,21 +100,18 @@ void myServer::onReadyRead()
     }
 }
 
-void myServer::sendSomething()
+void myServer::sendMessage(QString msg)
 {
+    QByteArray myMsg = msg.toUtf8();
 
-    QByteArray block;
-    QDataStream out(&block, QIODevice::WriteOnly);
-    out.setVersion(QDataStream::Qt_5_10);
-
-    out << "test test test";
-
-
-    QTcpSocket *clientConnection = server->nextPendingConnection();
-    connect(clientConnection, &QAbstractSocket::disconnected,
-            clientConnection, &QObject::deleteLater);
-
-
-    clientConnection->write(block);
-    clientConnection->disconnectFromHost();
+    for (QTcpSocket* socket : sockets)
+    {
+        socket->write(myMsg);
+        socket->flush();
+        socket->waitForBytesWritten(10);
+    }
+//    QTcpSocket *clientConnection = server->nextPendingConnection();
+//    connect(clientConnection, &QAbstractSocket::disconnected,
+//            clientConnection, &QObject::deleteLater);
+//    clientConnection->write(block);
 }

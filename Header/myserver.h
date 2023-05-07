@@ -15,19 +15,24 @@ public:
     explicit myServer(QObject *parent = nullptr);
     QByteArray tcpData;  // readed socket data kept here
     QByteArray buffer;
+    int noOfApples = 0;
+    int wholeData = 0;
     int packetSize = -1;
-    int test = 0;
+    bool serverRunning = false;
+
+    QTcpServer *server;
 
 signals:
+    bool menuConnectedSignal(bool);
+    bool imageTaken(bool);
 
 public slots:
     void onNewConnection();
     void onReadyRead();
     void onSocketStateChanged(QAbstractSocket::SocketState socketState);
-    void sendSomething();
+    void sendMessage(QString);
 
 private:
-    QTcpServer *server;
     QList<QTcpSocket*>  sockets;
 
 };
