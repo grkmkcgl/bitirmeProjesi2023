@@ -17,8 +17,8 @@ public:
     // IP address need to be given with hand. Check Jetson ip address!
 //    QString IPAdress = QString("rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mp4");
 //    QString IPAdress = "rtsp://192.168.247.160:8080/";
-    QString IPAdress = "http://192.168.0.18:8080/video";
-//    QString IPAdress = "rtsp://192.168.91.128:8554/mystream";
+//    QString IPAdress = "http://192.168.0.18:8080/video";
+    QString IPAdress = "rtsp://192.168.0.41:8554/mystream";
 
     QVBoxLayout *rtspLayout;
     QMediaPlayer *player;
