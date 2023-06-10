@@ -17,7 +17,7 @@ myServer::myServer(QObject *parent)
        serverRunning = true;
     }
 
-//    qDebug() << QNetworkInterface::allAddresses();
+    qDebug() << QNetworkInterface::allAddresses();
 }
 
 
