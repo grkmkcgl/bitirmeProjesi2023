@@ -107,15 +107,20 @@ void MainWindow::on_tcpSocketPushButton_clicked()
     if (!imageLoaded)
     {
         ui->serverStatusLabel->setText("IMAGE CORRUPTED");
+        ui->serverStatusLabel->setStyleSheet("QLabel { color : red; }");
         return;
     }
     else
+    {
         ui->serverStatusLabel->setText("Image taken successfully");
+        ui->serverStatusLabel->setStyleSheet("QLabel { color : green; }");
+    }
     imageLabel->setPixmap(tcpDataImage);
     heximageConverter::imageSaver(tcpServer->tcpData, imageFileNumber);  // save taken data as hex
     tcpServer->packetSize = -1; // reset packet size to take new input
     imageFileNumber += 1;
     ui->noOfApplesLCD->display(tcpServer->noOfApples);
+    ui->noOfTreesLCD->display(tcpServer->noOfTrees);
 }
 
 
@@ -172,9 +177,13 @@ void MainWindow::serverSignals(bool user)
     if (user == true)
     {
         ui->serverStatusLabel->setText("A user connected");
+        ui->serverStatusLabel->setStyleSheet("QLabel { color : green; }");
     }
     else
+    {
         ui->serverStatusLabel->setText("A user disconnected");
+        ui->serverStatusLabel->setStyleSheet("QLabel { color : red; }");
+    }
 }
 
 void MainWindow::imageTaken(bool value)

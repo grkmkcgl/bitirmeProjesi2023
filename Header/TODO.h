@@ -9,18 +9,19 @@
  *   Using TCP python library create TCP socket transfer detected files.
  *   (should these images be saved or only currently displayed?)
  *
----->if file size is too small myserver explodes. add header to understand whether info message comes like 101010101010
- *
 ++++>current and showFiles button directories should be same:
  *  images saved and taken in single file (saved files should be numbered)
  *
  *
  *
+---->if file size is too small myserver explodes. add header to understand whether info message comes like 101010101010
+ *
+----> heximageConverter::imageSaver saves in absolute path so that code can run on all machines.
  *
  *
  *
  *
  *
- * Camera.h is deprecated. No use, kept here for backup.
  *
+Camera.h is deprecated. No use, kept here for backup.
  */

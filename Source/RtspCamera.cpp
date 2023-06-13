@@ -30,7 +30,7 @@ void RtspCamera::initVideo()
 
 void RtspCamera::connectVideo()
 {
-    // CRASHES APP DO NOT USE BUTTON
+    // CRASHES APP DO NOT USE THIS BUTTON (removed)
     delete player;
     delete networkHandler;
     this->showVideo();

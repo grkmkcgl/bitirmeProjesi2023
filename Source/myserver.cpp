@@ -33,9 +33,9 @@ void myServer::onNewConnection()
         socket->write(QByteArray::fromStdString(socket->peerAddress().toString().toStdString() + " connected to server !\n"));
     }
 
-    socket->write("hello \r\n");
-    socket->flush(); // to buffer (or from buffer)
-    socket->waitForBytesWritten(100);
+//    socket->write("hello \r\n");
+//    socket->flush(); // to buffer (or from buffer)
+//    socket->waitForBytesWritten(100);
     emit menuConnectedSignal(true);
 }
 
@@ -88,6 +88,7 @@ void myServer::onReadyRead()
         noOfApples += newNoOfApples;
         buffer.clear();
         packetSize = -1;
+        noOfTrees += 1;
         emit imageTaken(true);
     }
     qDebug() << "tcpData size: " << tcpData.size();
